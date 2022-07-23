@@ -38,8 +38,8 @@ builder.Services.Configure<ServiceConfig>(config =>
 {
     config.Services = new List<ServiceDescriptor>(builder.Services);
 
-    // optional - default path to view services is /listallservices - recommended to choose your own path
-    config.Path = "/listservices";
+    // optional - default path to view services is /list-all-services - recommended to choose your own path
+    config.Path = "/list-services";
 });
 
 
@@ -73,7 +73,7 @@ app.UseCookiePolicy();
 app.UseSwagger();
 
 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Notebook API V1"));
 
 app.UseEndpoints(endpoints =>
 {

@@ -10,6 +10,7 @@ namespace Notebook.Web.Api
     /// A sample API Controller. Consider using API Endpoints (see Endpoints folder) for a more SOLID approach to building APIs
     /// https://github.com/ardalis/ApiEndpoints
     /// </summary>
+    [Route("projects")]
     public class ProjectsController : BaseApiController
     {
         private readonly IRepository<Project> _repository;
