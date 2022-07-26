@@ -26,7 +26,7 @@ namespace Notebook.Web.Pages.ToDoRazorPage
 
         public async Task OnGetAsync()
         {
-            var projectSpec = new ProjectByIdWithItemsSpec(ProjectId);
+            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(ProjectId);
             var project = await _repository.GetBySpecAsync(projectSpec);
 
             if (project == null)

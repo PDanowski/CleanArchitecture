@@ -4,7 +4,7 @@ using Notebook.Core.ProjectAggregate;
 
 namespace Notebook.Infrastructure.Data.Config
 {
-    public class ToDoConfiguration : IEntityTypeConfiguration<ToDoItem>
+    public class ToDoItemConfiguration : IEntityTypeConfiguration<ToDoItem>
     {
         public void Configure(EntityTypeBuilder<ToDoItem> builder)
         {

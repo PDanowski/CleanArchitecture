@@ -8,6 +8,7 @@ namespace Notebook.SharedKernel
         public int Id { get; set; }
 
         private List<DomainEventBase> _domainEvents = new();
+
         [NotMapped]
         public IEnumerable<DomainEventBase> DomainEvents => _domainEvents.AsReadOnly();
 

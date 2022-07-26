@@ -18,6 +18,7 @@ namespace Notebook.Infrastructure.Data
         }
 
         public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
+        public DbSet<Note> Notes => Set<Note>();
         public DbSet<Project> Projects => Set<Project>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -20,7 +20,7 @@ namespace Notebook.Web.Controllers
         [HttpGet("{projectId:int}")]
         public async Task<IActionResult> Index(int projectId = 1)
         {
-            var spec = new ProjectByIdWithItemsSpec(projectId);
+            var spec = new ProjectByIdWithItemsAndNotesSpec(projectId);
             var project = await _projectRepository.GetBySpecAsync(spec);
             if (project == null)
             {

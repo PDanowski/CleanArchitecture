@@ -30,7 +30,7 @@ namespace Notebook.Core.ProjectAggregate
             Guard.Against.Null(newItem, nameof(newItem));
             _items.Add(newItem);
 
-            var newItemAddedEvent = new NewItemAddedEvent(this, newItem);
+            var newItemAddedEvent = new NewToDoItemAddedEvent(this, newItem);
             base.RegisterDomainEvent(newItemAddedEvent);
         }
 
@@ -45,7 +45,7 @@ namespace Notebook.Core.ProjectAggregate
 
           _items.Remove(itemToRemove);
 
-          var newItemRemovedEvent = new NewItemRemovedEvent(this, toDoItemId);
+          var newItemRemovedEvent = new ToDoItemRemovedEvent(this, toDoItemId);
           base.RegisterDomainEvent(newItemRemovedEvent);
         }
 
@@ -69,13 +69,13 @@ namespace Notebook.Core.ProjectAggregate
 
           _notes.Remove(noteToRemove);
 
-          var newNoteRemovedEvent = new NewNoteRemovedEvent(this, noteId);
+          var newNoteRemovedEvent = new NoteRemovedEvent(this, noteId);
           base.RegisterDomainEvent(newNoteRemovedEvent);
         }
 
-    public void UpdateName(string newName)
-        {
-            Name = Guard.Against.NullOrEmpty(newName, nameof(newName));
+        public void UpdateName(string newName)
+            {
+                Name = Guard.Against.NullOrEmpty(newName, nameof(newName));
+            }
         }
-    }
 }
