@@ -11,6 +11,10 @@ namespace Notebook.Core.ProjectAggregate
 
         private List<ToDoItem> _items = new List<ToDoItem>();
         public IEnumerable<ToDoItem> Items => _items.AsReadOnly();
+
+        private List<Note> _notes = new List<Note>();
+        public IEnumerable<Note> Notes => _notes.AsReadOnly();
+
         public ProjectStatus Status => _items.All(i => i.IsDone) ? ProjectStatus.Complete : ProjectStatus.InProgress;
 
         public PriorityStatus Priority { get; }
@@ -21,7 +25,7 @@ namespace Notebook.Core.ProjectAggregate
             Priority = priority;
         }
 
-        public void AddItem(ToDoItem newItem)
+        public void AddToDoItem(ToDoItem newItem)
         {
             Guard.Against.Null(newItem, nameof(newItem));
             _items.Add(newItem);
@@ -30,7 +34,46 @@ namespace Notebook.Core.ProjectAggregate
             base.RegisterDomainEvent(newItemAddedEvent);
         }
 
-        public void UpdateName(string newName)
+        public void RemoveToDoItem(int toDoItemId)
+        {
+          var itemToRemove = _items.FirstOrDefault(x => x.Id == toDoItemId);
+
+          if (itemToRemove == null)
+          {
+            throw new ArgumentException($"ToDoItem with ID: {toDoItemId} not exists.");
+          }
+
+          _items.Remove(itemToRemove);
+
+          var newItemRemovedEvent = new NewItemRemovedEvent(this, toDoItemId);
+          base.RegisterDomainEvent(newItemRemovedEvent);
+        }
+
+        public void AddNote(Note newNote)
+        {
+          Guard.Against.Null(newNote, nameof(newNote));
+          _notes.Add(newNote);
+
+          var newNoteAddedEvent = new NewNoteAddedEvent(this, newNote);
+          base.RegisterDomainEvent(newNoteAddedEvent);
+        }
+
+        public void RemoveNote(int noteId)
+        {
+          var noteToRemove = _notes.FirstOrDefault(x => x.Id == noteId);
+
+          if (noteToRemove == null)
+          {
+            throw new ArgumentException($"Note with ID: {noteId} not exists.");
+          }
+
+          _notes.Remove(noteToRemove);
+
+          var newNoteRemovedEvent = new NewNoteRemovedEvent(this, noteId);
+          base.RegisterDomainEvent(newNoteRemovedEvent);
+        }
+
+    public void UpdateName(string newName)
         {
             Name = Guard.Against.NullOrEmpty(newName, nameof(newName));
         }

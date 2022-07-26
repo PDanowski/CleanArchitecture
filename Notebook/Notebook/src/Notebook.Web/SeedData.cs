@@ -51,9 +51,9 @@ namespace Notebook.Web
             }
             dbContext.SaveChanges();
 
-            TestProject1.AddItem(ToDoItem1);
-            TestProject1.AddItem(ToDoItem2);
-            TestProject1.AddItem(ToDoItem3);
+            TestProject1.AddToDoItem(ToDoItem1);
+            TestProject1.AddToDoItem(ToDoItem2);
+            TestProject1.AddToDoItem(ToDoItem3);
             dbContext.Projects.Add(TestProject1);
 
             dbContext.SaveChanges();

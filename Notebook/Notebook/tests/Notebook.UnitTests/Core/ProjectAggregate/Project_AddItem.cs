@@ -16,7 +16,7 @@ namespace Notebook.UnitTests.Core.ProjectAggregate
                 Description = "description"
             };
 
-            _testProject.AddItem(_testItem);
+            _testProject.AddToDoItem(_testItem);
 
             Assert.Contains(_testItem, _testProject.Items);
         }
@@ -25,7 +25,7 @@ namespace Notebook.UnitTests.Core.ProjectAggregate
         public void ThrowsExceptionGivenNullItem()
         {
 #nullable disable
-            Action action = () => _testProject.AddItem(null);
+            Action action = () => _testProject.AddToDoItem(null);
 #nullable enable
 
             var ex = Assert.Throws<ArgumentNullException>(action);

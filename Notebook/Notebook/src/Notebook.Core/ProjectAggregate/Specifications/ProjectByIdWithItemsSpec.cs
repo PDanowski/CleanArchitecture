@@ -1,5 +1,4 @@
 ﻿using Ardalis.Specification;
-using Notebook.Core.ProjectAggregate;
 
 namespace Notebook.Core.ProjectAggregate.Specifications
 {
