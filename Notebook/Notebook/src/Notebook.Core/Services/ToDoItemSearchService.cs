@@ -28,13 +28,13 @@ namespace Notebook.Core.Services
                 return Result<List<ToDoItem>>.Invalid(errors);
             }
 
-            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(projectId);
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
             var project = await _repository.GetBySpecAsync(projectSpec);
 
             // TODO: Optionally use Ardalis.GuardClauses Guard.Against.NotFound and catch
             if (project == null) return Result<List<ToDoItem>>.NotFound();
 
-            var incompleteSpec = new IncompleteItemsSearchSpec(searchString);
+            var incompleteSpec = new IncompleteToDoItemsSearchSpec(searchString);
 
             try
             {
@@ -51,14 +51,14 @@ namespace Notebook.Core.Services
 
         public async Task<Result<ToDoItem>> GetNextIncompleteItemAsync(int projectId)
         {
-            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(projectId);
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
             var project = await _repository.GetBySpecAsync(projectSpec);
             if (project == null)
             {
                 return Result<ToDoItem>.NotFound();
             }
 
-            var incompleteSpec = new IncompleteItemsSpec();
+            var incompleteSpec = new IncompleteToDoItemsSpec();
 
             var items = incompleteSpec.Evaluate(project.Items).ToList();
 

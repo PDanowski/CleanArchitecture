@@ -2,9 +2,9 @@
 
 namespace Notebook.Core.ProjectAggregate.Specifications
 {
-    public class IncompleteItemsSpec : Specification<ToDoItem>
+    public class IncompleteToDoItemsSpec : Specification<ToDoItem>
     {
-        public IncompleteItemsSpec()
+        public IncompleteToDoItemsSpec()
         {
             Query.Where(item => !item.IsDone);
         }

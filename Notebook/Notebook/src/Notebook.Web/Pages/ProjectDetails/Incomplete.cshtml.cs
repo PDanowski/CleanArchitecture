@@ -21,13 +21,13 @@ namespace Notebook.Web.Pages.ToDoRazorPage
 
         public async Task OnGetAsync()
         {
-            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(1); // TODO: get from route
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(1); // TODO: get from route
             var project = await _repository.GetBySpecAsync(projectSpec);
             if (project == null)
             {
                 return;
             }
-            var spec = new IncompleteItemsSpec();
+            var spec = new IncompleteToDoItemsSpec();
 
             ToDoItems = spec.Evaluate(project.Items).ToList();
         }

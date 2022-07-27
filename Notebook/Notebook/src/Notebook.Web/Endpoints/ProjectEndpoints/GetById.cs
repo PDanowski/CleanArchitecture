@@ -28,7 +28,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
         public override async Task<ActionResult<GetProjectByIdResponse>> HandleAsync([FromRoute] GetProjectByIdRequest request,
             CancellationToken cancellationToken)
         {
-            var spec = new ProjectByIdWithItemsAndNotesSpec(request.ProjectId);
+            var spec = new ProjectByIdWithToDoItemsAndNotesSpec(request.ProjectId);
             var entity = await _repository.GetBySpecAsync(spec); // TODO: pass cancellation token
             if (entity == null) return NotFound();
 

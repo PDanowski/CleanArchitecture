@@ -2,9 +2,9 @@
 
 namespace Notebook.Core.ProjectAggregate.Specifications
 {
-    public class ProjectByIdWithItemsAndNotesSpec : Specification<Project>, ISingleResultSpecification
+    public class ProjectByIdWithToDoItemsAndNotesSpec : Specification<Project>, ISingleResultSpecification
     {
-        public ProjectByIdWithItemsAndNotesSpec(int projectId)
+        public ProjectByIdWithToDoItemsAndNotesSpec(int projectId)
         {
             Query
                 .Where(project => project.Id == projectId)

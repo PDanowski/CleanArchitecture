@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Notebook.Core.ProjectAggregate.Handlers
 {
-    public class ItemCompletedEmailNotificationHandler : INotificationHandler<ToDoItemCompletedEvent>
+    public class ToDoItemCompletedEmailNotificationHandler : INotificationHandler<ToDoItemCompletedEvent>
     {
         private readonly IEmailSender _emailSender;
 
         // In a REAL app you might want to use the Outbox pattern and a command/queue here...
-        public ItemCompletedEmailNotificationHandler(IEmailSender emailSender)
+        public ToDoItemCompletedEmailNotificationHandler(IEmailSender emailSender)
         {
             _emailSender = emailSender;
         }

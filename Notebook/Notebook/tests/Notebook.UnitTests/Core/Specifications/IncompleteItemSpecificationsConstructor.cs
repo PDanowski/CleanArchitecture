@@ -16,7 +16,7 @@ namespace Notebook.UnitTests.Core.Specifications
 
             var items = new List<ToDoItem>() { item1, item2, item3 };
 
-            var spec = new IncompleteItemsSpec();
+            var spec = new IncompleteToDoItemsSpec();
 
             var filteredList = spec.Evaluate(items);
 

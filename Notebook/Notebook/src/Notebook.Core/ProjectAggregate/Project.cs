@@ -25,12 +25,12 @@ namespace Notebook.Core.ProjectAggregate
             Priority = priority;
         }
 
-        public void AddToDoItem(ToDoItem newItem)
+        public void AddToDoItem(ToDoItem newToDoItem)
         {
-            Guard.Against.Null(newItem, nameof(newItem));
-            _items.Add(newItem);
+            Guard.Against.Null(newToDoItem, nameof(newToDoItem));
+            _items.Add(newToDoItem);
 
-            var newItemAddedEvent = new NewToDoItemAddedEvent(this, newItem);
+            var newItemAddedEvent = new NewToDoItemAddedEvent(this, newToDoItem);
             base.RegisterDomainEvent(newItemAddedEvent);
         }
 

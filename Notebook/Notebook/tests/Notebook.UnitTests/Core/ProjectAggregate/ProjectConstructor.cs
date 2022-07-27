@@ -31,12 +31,13 @@ namespace Notebook.UnitTests.Core.ProjectAggregate
         }
 
         [Fact]
-        public void InitializesTaskListToEmptyList()
+        public void InitializesToDoItemsAndNotesListToEmptyList()
         {
             _testProject = CreateProject();
 
             Assert.NotNull(_testProject.Items);
-        }
+            Assert.NotNull(_testProject.Notes);
+    }
 
         [Fact]
         public void InitializesStatusToInProgress()

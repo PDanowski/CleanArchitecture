@@ -39,7 +39,7 @@ namespace Notebook.Web.Api
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(id);
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(id);
             var project = await _repository.GetBySpecAsync(projectSpec);
             if (project == null)
             {
@@ -79,7 +79,7 @@ namespace Notebook.Web.Api
         [HttpPatch("{projectId:int}/complete/{itemId}")]
         public async Task<IActionResult> Complete(int projectId, int itemId)
         {
-            var projectSpec = new ProjectByIdWithItemsAndNotesSpec(projectId);
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
             var project = await _repository.GetBySpecAsync(projectSpec);
             if (project == null) return NotFound("No such project");
 
