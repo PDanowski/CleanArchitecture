@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
 using Notebook.SharedKernel.Interfaces;
@@ -11,6 +12,7 @@ namespace Notebook.Web.Api
     /// https://github.com/ardalis/ApiEndpoints
     /// </summary>
     [Route("projects")]
+    [Authorize]
     public class ProjectsController : BaseApiController
     {
         private readonly IRepository<Project> _repository;
