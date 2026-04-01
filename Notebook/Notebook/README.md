@@ -65,6 +65,17 @@ If you need a previous version use one of these tagged commits:
 - [DotNetRocks Podcast Discussion with Steve "ardalis" Smith](https://player.fm/series/net-rocks/clean-architecture-with-steve-smith)
 - [Fritz and Friends Streaming Discussion with Steve "ardalis" Smith](https://www.youtube.com/watch?v=k8cZUW4MS3I)
 
+## Docker
+
+Build and run the web app container from repository root:
+
+```powershell
+docker build -f Notebook/Notebook/Dockerfile -t notebook-web:local Notebook/Notebook
+docker run --rm -p 8080:8080 notebook-web:local
+```
+
+The container stores SQLite data at `/data/database.sqlite` and listens on port `8080`.
+
 # Getting Started
 
 To use this template, there are a few options:

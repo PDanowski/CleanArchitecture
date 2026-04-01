@@ -3,6 +3,7 @@ using Ardalis.ListStartupServices;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.Sqlite;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Notebook.Core;
@@ -23,7 +24,25 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string connectionString = builder.Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("SqliteConnection") ?? "Data Source=database.sqlite";
+var sqliteConnection = new SqliteConnectionStringBuilder(connectionString);
+if (!string.IsNullOrWhiteSpace(sqliteConnection.DataSource))
+{
+    var dataSourcePath = sqliteConnection.DataSource;
+    if (!Path.IsPathRooted(dataSourcePath))
+    {
+        dataSourcePath = Path.Combine(AppContext.BaseDirectory, dataSourcePath);
+    }
+
+    var dbDirectory = Path.GetDirectoryName(dataSourcePath);
+    if (!string.IsNullOrEmpty(dbDirectory))
+    {
+        Directory.CreateDirectory(dbDirectory);
+    }
+
+    sqliteConnection.DataSource = dataSourcePath;
+    connectionString = sqliteConnection.ToString();
+}
 
 builder.Services.AddDbContext(connectionString);
 
@@ -93,7 +112,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+var runningInContainer = string.Equals(
+    Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"),
+    "true",
+    StringComparison.OrdinalIgnoreCase);
+if (!app.Environment.IsDevelopment() && !runningInContainer)
+{
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 app.UseCookiePolicy();
 
