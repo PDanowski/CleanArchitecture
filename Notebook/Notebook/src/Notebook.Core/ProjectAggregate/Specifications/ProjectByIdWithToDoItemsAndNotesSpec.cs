@@ -2,7 +2,7 @@
 
 namespace Notebook.Core.ProjectAggregate.Specifications
 {
-    public class ProjectByIdWithToDoItemsAndNotesSpec : Specification<Project>, ISingleResultSpecification
+    public class ProjectByIdWithToDoItemsAndNotesSpec : Specification<Project>, ISingleResultSpecification<Project>
     {
         public ProjectByIdWithToDoItemsAndNotesSpec(int projectId)
         {

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
 using Notebook.SharedKernel.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Notebook.Web.Pages.ToDoRazorPage
@@ -12,6 +14,9 @@ namespace Notebook.Web.Pages.ToDoRazorPage
     {
         private readonly IRepository<Project> _repository;
 
+        [BindProperty(SupportsGet = true)]
+        public int ProjectId { get; set; } = 1;
+
         public List<ToDoItem>? ToDoItems { get; set; }
 
         public IncompleteModel(IRepository<Project> repository)
@@ -19,16 +24,16 @@ namespace Notebook.Web.Pages.ToDoRazorPage
             _repository = repository;
         }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(CancellationToken cancellationToken)
         {
-            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(1); // TODO: get from route
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(ProjectId);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec, cancellationToken);
             if (project == null)
             {
                 return;
             }
-            var spec = new IncompleteToDoItemsSpec();
 
+            var spec = new IncompleteToDoItemsSpec();
             ToDoItems = spec.Evaluate(project.Items).ToList();
         }
     }

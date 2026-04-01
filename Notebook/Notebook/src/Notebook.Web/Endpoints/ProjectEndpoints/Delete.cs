@@ -1,4 +1,4 @@
-﻿using Ardalis.ApiEndpoints;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.SharedKernel.Interfaces;
@@ -27,10 +27,10 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
         public override async Task<ActionResult> HandleAsync([FromRoute] DeleteProjectRequest request,
             CancellationToken cancellationToken)
         {
-            var aggregateToDelete = await _repository.GetByIdAsync(request.ProjectId); // TODO: pass cancellation token
+            var aggregateToDelete = await _repository.GetByIdAsync(request.ProjectId, cancellationToken);
             if (aggregateToDelete == null) return NotFound();
 
-            await _repository.DeleteAsync(aggregateToDelete);
+            await _repository.DeleteAsync(aggregateToDelete, cancellationToken);
 
             return NoContent();
         }

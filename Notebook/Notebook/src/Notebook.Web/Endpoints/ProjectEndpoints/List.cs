@@ -1,4 +1,4 @@
-﻿using Ardalis.ApiEndpoints;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.SharedKernel.Interfaces;
@@ -27,7 +27,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
         public override async Task<ActionResult<ProjectListResponse>> HandleAsync(CancellationToken cancellationToken)
         {
             var response = new ProjectListResponse();
-            response.Projects = (await _repository.ListAsync()) // TODO: pass cancellation token
+            response.Projects = (await _repository.ListAsync(cancellationToken))
                 .Select(project => new ProjectRecord(project.Id, project.Name))
                 .ToList();
 

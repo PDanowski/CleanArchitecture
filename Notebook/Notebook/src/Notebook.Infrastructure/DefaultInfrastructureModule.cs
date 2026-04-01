@@ -1,8 +1,8 @@
-﻿using Autofac;
+using Autofac;
 using MediatR;
 using MediatR.Pipeline;
+using Notebook.Core;
 using Notebook.Core.Interfaces;
-using Notebook.Core.ProjectAggregate;
 using Notebook.Infrastructure.Data;
 using Notebook.SharedKernel;
 using Notebook.SharedKernel.Interfaces;
@@ -19,16 +19,15 @@ namespace Notebook.Infrastructure
         public DefaultInfrastructureModule(bool isDevelopment, Assembly? callingAssembly = null)
         {
             _isDevelopment = isDevelopment;
-            var coreAssembly = Assembly.GetAssembly(typeof(Project)); // TODO: Replace "Project" with any type from your Core project
+            var coreAssembly = typeof(DefaultCoreModule).Assembly;
             var infrastructureAssembly = Assembly.GetAssembly(typeof(StartupSetup));
-            if (coreAssembly != null)
-            {
-                _assemblies.Add(coreAssembly);
-            }
+            _assemblies.Add(coreAssembly);
+
             if (infrastructureAssembly != null)
             {
                 _assemblies.Add(infrastructureAssembly);
             }
+
             if (callingAssembly != null)
             {
                 _assemblies.Add(callingAssembly);
@@ -60,16 +59,23 @@ namespace Notebook.Infrastructure
                 .As<IMediator>()
                 .InstancePerLifetimeScope();
 
+            // MediatR 14 expects licensing services in the container.
+            var licenseAccessorType = Type.GetType("MediatR.Licensing.LicenseAccessor, MediatR");
+            if (licenseAccessorType != null)
+            {
+                builder.RegisterType(licenseAccessorType).AsSelf().SingleInstance();
+            }
+
+            var licenseValidatorType = Type.GetType("MediatR.Licensing.LicenseValidator, MediatR");
+            if (licenseValidatorType != null)
+            {
+                builder.RegisterType(licenseValidatorType).AsSelf().SingleInstance();
+            }
+
             builder
               .RegisterType<DomainEventDispatcher>()
               .As<IDomainEventDispatcher>()
               .InstancePerLifetimeScope();
-
-            builder.Register<ServiceFactory>(context =>
-            {
-                var c = context.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
 
             var mediatrOpenTypes = new[]
             {
@@ -93,12 +99,10 @@ namespace Notebook.Infrastructure
 
         private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
         {
-            // TODO: Add development only services
         }
 
         private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
         {
-            // TODO: Add production only services
         }
 
     }

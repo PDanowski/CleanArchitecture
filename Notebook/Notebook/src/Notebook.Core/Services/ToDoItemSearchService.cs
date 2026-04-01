@@ -1,4 +1,5 @@
-﻿using Ardalis.Result;
+using Ardalis.Result;
+using Microsoft.Extensions.Logging;
 using Notebook.Core.Interfaces;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
@@ -9,10 +10,12 @@ namespace Notebook.Core.Services
     public class ToDoItemSearchService : IToDoItemSearchService
     {
         private readonly IRepository<Project> _repository;
+        private readonly ILogger<ToDoItemSearchService> _logger;
 
-        public ToDoItemSearchService(IRepository<Project> repository)
+        public ToDoItemSearchService(IRepository<Project> repository, ILogger<ToDoItemSearchService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<Result<List<ToDoItem>>> GetAllIncompleteItemsAsync(int projectId, string searchString)
@@ -29,9 +32,8 @@ namespace Notebook.Core.Services
             }
 
             var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec);
 
-            // TODO: Optionally use Ardalis.GuardClauses Guard.Against.NotFound and catch
             if (project == null) return Result<List<ToDoItem>>.NotFound();
 
             var incompleteSpec = new IncompleteToDoItemsSearchSpec(searchString);
@@ -44,15 +46,15 @@ namespace Notebook.Core.Services
             }
             catch (Exception ex)
             {
-                // TODO: Log details here
-                return Result<List<ToDoItem>>.Error(new[] { ex.Message });
+                _logger.LogError(ex, "Error while searching incomplete to-do items for project {ProjectId}.", projectId);
+                return Result<List<ToDoItem>>.Error(ex.Message);
             }
         }
 
         public async Task<Result<ToDoItem>> GetNextIncompleteItemAsync(int projectId)
         {
             var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec);
             if (project == null)
             {
                 return Result<ToDoItem>.NotFound();

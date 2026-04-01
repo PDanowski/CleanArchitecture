@@ -20,6 +20,12 @@ namespace Notebook.UnitTests
             return Task.FromResult<TResponse>(default);
         }
 
+        public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default)
+            where TRequest : IRequest
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<object?> Send(object request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult<object?>(default);

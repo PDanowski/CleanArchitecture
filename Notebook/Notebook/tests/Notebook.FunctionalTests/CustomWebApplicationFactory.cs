@@ -38,7 +38,8 @@ namespace Notebook.FunctionalTests
                 var logger = scopedServices
                     .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-                // Ensure the database is created.
+                // Recreate DB for each test host instance to keep deterministic test data.
+                db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
 
                 try
@@ -65,25 +66,6 @@ namespace Notebook.FunctionalTests
             builder
                 .ConfigureServices(services =>
                 {
-                    // Remove the app's ApplicationDbContext registration.
-                    var descriptor = services.SingleOrDefault(
-            d => d.ServiceType ==
-                typeof(DbContextOptions<AppDbContext>));
-
-                    if (descriptor != null)
-                    {
-                        services.Remove(descriptor);
-                    }
-
-                    // This should be set for each individual test run
-                    string inMemoryCollectionName = Guid.NewGuid().ToString();
-
-                    // Add ApplicationDbContext using an in-memory database for testing.
-                    services.AddDbContext<AppDbContext>(options =>
-        {
-            options.UseInMemoryDatabase(inMemoryCollectionName);
-        });
-
                     services.AddScoped<IMediator, NoOpMediator>();
                 });
         }

@@ -4,7 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Notebook.Core;
 using Notebook.Infrastructure;
 using Notebook.Infrastructure.Data;
@@ -33,7 +33,8 @@ builder.Services.AddAuthentication(x =>
   x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(o =>
 {
-  var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]);
+  var jwtKey = builder.Configuration["JWT:Key"] ?? "dev-only-jwt-signing-key-change-me";
+  var key = Encoding.UTF8.GetBytes(jwtKey);
   o.SaveToken = true;
   o.TokenValidationParameters = new TokenValidationParameters
   {
@@ -41,8 +42,8 @@ builder.Services.AddAuthentication(x =>
     ValidateAudience = false,
     ValidateLifetime = true,
     ValidateIssuerSigningKey = true,
-    ValidIssuer = builder.Configuration["JWT:Issuer"],
-    ValidAudience = builder.Configuration["JWT:Audience"],
+    ValidIssuer = builder.Configuration["JWT:Issuer"] ?? "notebook",
+    ValidAudience = builder.Configuration["JWT:Audience"] ?? "notebook",
     IssuerSigningKey = new SymmetricSecurityKey(key)
   };
 });

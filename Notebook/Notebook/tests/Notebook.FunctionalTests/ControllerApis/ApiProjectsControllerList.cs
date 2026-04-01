@@ -1,4 +1,4 @@
-﻿using Ardalis.HttpClientTestExtensions;
+using Newtonsoft.Json;
 using Notebook.Web;
 using Notebook.Web.ApiModels;
 using Xunit;
@@ -18,7 +18,10 @@ namespace Notebook.FunctionalTests.ControllerApis
         [Fact]
         public async Task ReturnsOneProject()
         {
-            var result = await _client.GetAndDeserialize<IEnumerable<ProjectDTO>>("/api/projects");
+            var response = await _client.GetAsync("/api/projects");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<IEnumerable<ProjectDTO>>(json)!;
 
             Assert.Single(result);
             Assert.Contains(result, i => i.Name == SeedData.TestProject1.Name);

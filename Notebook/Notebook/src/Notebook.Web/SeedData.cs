@@ -28,7 +28,7 @@ namespace Notebook.Web
             using (var dbContext = new AppDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
             {
-                // Look for any TODO items.
+            // Look for any existing to-do items.
                 if (dbContext.ToDoItems.Any())
                 {
                     return;   // DB has been seeded

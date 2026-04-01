@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
 using Notebook.SharedKernel.Interfaces;
@@ -21,7 +21,7 @@ namespace Notebook.Web.Controllers
         public async Task<IActionResult> Index(int projectId = 1)
         {
             var spec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
-            var project = await _projectRepository.GetBySpecAsync(spec);
+            var project = await _projectRepository.FirstOrDefaultAsync(spec);
             if (project == null)
             {
                 return NotFound();

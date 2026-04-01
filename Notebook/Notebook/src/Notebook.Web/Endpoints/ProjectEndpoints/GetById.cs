@@ -1,4 +1,4 @@
-﻿using Ardalis.ApiEndpoints;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
@@ -29,7 +29,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
             CancellationToken cancellationToken)
         {
             var spec = new ProjectByIdWithToDoItemsAndNotesSpec(request.ProjectId);
-            var entity = await _repository.GetBySpecAsync(spec); // TODO: pass cancellation token
+            var entity = await _repository.FirstOrDefaultAsync(spec, cancellationToken);
             if (entity == null) return NotFound();
 
             var response = new GetProjectByIdResponse

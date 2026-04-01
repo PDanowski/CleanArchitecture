@@ -48,7 +48,11 @@ Or if you're feeling really generous, we now support GitHub sponsorships - see t
 
 ## Versions
 
-The master branch is now using .NET 6. If you need a previous version use one of these tagged commits:
+The project now targets .NET 10 (`net10.0`) and uses .NET SDK `10.0.104` (see `global.json`).
+
+Package references are centrally managed in `Directory.Packages.props` and have been refreshed to current versions compatible with .NET 10.
+
+If you need a previous version use one of these tagged commits:
 
 - [5.0](https://github.com/ardalis/CleanArchitecture/releases/tag/dotnet-core-5)
 - [3.1](https://github.com/ardalis/CleanArchitecture/tree/dotnet-core-3.1)

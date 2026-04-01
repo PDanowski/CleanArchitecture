@@ -1,4 +1,4 @@
-﻿using Ardalis.ApiEndpoints;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.SharedKernel.Interfaces;
@@ -34,7 +34,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
 
             var newProject = new Project(request.Name, PriorityStatus.Backlog);
 
-            var createdItem = await _repository.AddAsync(newProject); // TODO: pass cancellation token
+            var createdItem = await _repository.AddAsync(newProject, cancellationToken);
 
             var response = new CreateProjectResponse
             (

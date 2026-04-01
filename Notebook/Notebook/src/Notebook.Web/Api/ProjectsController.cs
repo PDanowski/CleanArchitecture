@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
@@ -11,7 +11,7 @@ namespace Notebook.Web.Api
     /// A sample API Controller. Consider using API Endpoints (see Endpoints folder) for a more SOLID approach to building APIs
     /// https://github.com/ardalis/ApiEndpoints
     /// </summary>
-    [Route("projects")]
+    [Route("api/[controller]")]
     [Authorize]
     public class ProjectsController : BaseApiController
     {
@@ -24,6 +24,7 @@ namespace Notebook.Web.Api
 
         // GET: api/Projects
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> List()
         {
             var projectDTOs = (await _repository.ListAsync())
@@ -42,7 +43,7 @@ namespace Notebook.Web.Api
         public async Task<IActionResult> GetById(int id)
         {
             var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(id);
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec);
             if (project == null)
             {
                 return NotFound();
@@ -82,7 +83,7 @@ namespace Notebook.Web.Api
         public async Task<IActionResult> Complete(int projectId, int itemId)
         {
             var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(projectId);
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec);
             if (project == null) return NotFound("No such project");
 
             var toDoItem = project.Items.FirstOrDefault(item => item.Id == itemId);

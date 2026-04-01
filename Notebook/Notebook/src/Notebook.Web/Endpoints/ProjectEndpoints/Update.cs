@@ -1,4 +1,4 @@
-﻿using Ardalis.ApiEndpoints;
+using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Notebook.Core.ProjectAggregate;
 using Notebook.SharedKernel.Interfaces;
@@ -31,7 +31,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
             {
                 return BadRequest();
             }
-            var existingProject = await _repository.GetByIdAsync(request.Id); // TODO: pass cancellation token
+            var existingProject = await _repository.GetByIdAsync(request.Id, cancellationToken);
 
             if (existingProject == null)
             {
@@ -39,7 +39,7 @@ namespace Notebook.Web.Endpoints.ProjectEndpoints
             }
             existingProject.UpdateName(request.Name);
 
-            await _repository.UpdateAsync(existingProject); // TODO: pass cancellation token
+            await _repository.UpdateAsync(existingProject, cancellationToken);
 
             var response = new UpdateProjectResponse(
                 project: new ProjectRecord(existingProject.Id, existingProject.Name)

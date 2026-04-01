@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Notebook.Core.ProjectAggregate;
 using Notebook.Core.ProjectAggregate.Specifications;
@@ -27,7 +27,7 @@ namespace Notebook.Web.Pages.ToDoRazorPage
         public async Task OnGetAsync()
         {
             var projectSpec = new ProjectByIdWithToDoItemsAndNotesSpec(ProjectId);
-            var project = await _repository.GetBySpecAsync(projectSpec);
+            var project = await _repository.FirstOrDefaultAsync(projectSpec);
 
             if (project == null)
             {
