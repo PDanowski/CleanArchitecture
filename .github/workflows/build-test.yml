@@ -1,0 +1,31 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore Notebook/Notebook/Notebook.sln
+
+      - name: Build
+        run: dotnet build Notebook/Notebook/Notebook.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test Notebook/Notebook/Notebook.sln --configuration Release --no-build --verbosity normal
